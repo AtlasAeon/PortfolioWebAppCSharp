@@ -1,0 +1,25 @@
+﻿@model IEnumerable<PortfolioWebApp.Models.Project>
+@{
+    ViewBag.Title = "Projects";
+}
+
+<div class="parallax-container">
+    <div class="parallax"><img src="~/images/coffee.jpg" alt="Unsplashed background img 1" style="display: block; transform: translate3d(-50%, 161px, 0px);"></div>
+</div>
+
+<h2>My Projects</h2>
+
+@foreach (var item in Model) {
+    <div class="card">
+        <div class="card-image">
+            <img src=@item.ProjectImg>
+            <span class="card-title">@Html.DisplayFor(modelItem => item.ProjectName)</span>
+        </div>
+        <div class="card-content">
+            <p>@Html.DisplayFor(modelItem => item.ProjectDescription)</p>
+        </div>
+        <div class="card-action">
+            <a href=@Html.DisplayFor(modelItem => item.ProjectRepo) target="_blank">GitHub link</a>
+        </div>
+    </div>
+}

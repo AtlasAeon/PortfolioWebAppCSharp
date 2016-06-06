@@ -1,0 +1,65 @@
+﻿/*body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}*/
+
+/* Set padding to keep content from hitting the edges 
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+ Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+ Set width on the form input elements since they're 100% wide by default 
+input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    margin-left: 240px;
+}
+
+main {
+    flex: 1 0 auto;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#myface {
+    margin-left: 45px;
+    height: 150px;
+    width: auto;
+}
+
+.parallax-container {
+      height: 300px;
+    }
+
+/*code for left right cards*/
+.card-image {
+  float: left;
+  width: 40%;
+  height: 250px;
+}
+.card-image img {
+  height: 100%;
+}
+.right-content {
+  width: 60%;
+  float: left;
+  margin-bottom: auto;
+}
+.card-title {
+  padding-left: 20px;
+}

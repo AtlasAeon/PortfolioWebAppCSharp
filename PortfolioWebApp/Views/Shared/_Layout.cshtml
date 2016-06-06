@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Materialize/css")
+    @Styles.Render("~/fontawesome/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header>
+        <ul id="nav-mobile" class="side-nav fixed blue-grey darken-4" style="transform: translateX(0%);">
+            <li><img id="myface" class="circle center" src="~/images/myface.jpg"></li>
+            <li><div class="grey lighten-3" id="social-icons">
+                <a href="https://www.linkedin.com/in/cadale-thomas-0716a6bb" target="_blank"><i class="fa  fa-linkedin  fa-2x " title="LinkedIn"></i></a>
+                <a href="http://github.com/atlasaeon" target="_blank"><i class="fa  fa-github  fa-2x " title="Github"></i></a>
+            </div></li>
+            <li><a href=@Url.Action("Index") class="side--home grey-text text-lighten-4"><i class="fa fa-home fa-2x"></i> Home</a></li>
+            <li><a href=@Url.Action("Projects") class="side--projects grey-text text-lighten-4"><i class="fa fa-code fa-2x"></i> Projects</a></li>
+            <li><a href=@Url.Action("About") class="side--about grey-text text-lighten-4"><i class="fa fa-child fa-2x"></i> About</a></li>
+            <li><a href=@Url.Action("Contact") class="side--contact grey-text text-lighten-4"><i class="fa fa-send fa-2x grey-text text-lighten-4"></i> Contact</a></li>
+        </ul>
+        @*<div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>*@
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer @*class="page-footer"*@>
+        <div @*class="footer-copyright"*@>
+            <p class="center">&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/materialize")
+    @Scripts.Render("~/bundles/app")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
