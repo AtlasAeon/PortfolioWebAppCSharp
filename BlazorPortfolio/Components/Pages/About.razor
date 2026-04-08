@@ -1,0 +1,46 @@
+@page "/about"
+
+<PageTitle>About | Cadale Thomas</PageTitle>
+
+<div class="hero-section" style="background-image: url('images/astronaut.jpg');">
+    <div class="hero-overlay">
+        <div class="hero-quote">
+            <p>Always learning, always building.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <h1>Hello!</h1>
+
+    <section class="mb-4">
+        <h4>A little about me</h4>
+        <p class="lead">
+            I'm a junior developer from Cleveland, Ohio eager to learn as much as I can
+            get my hands on in software development.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h4>Skills</h4>
+        <div class="skills-grid mt-3">
+            @foreach (var skill in _skills)
+            {
+                <span class="skill-badge">@skill</span>
+            }
+        </div>
+    </section>
+
+    <a href="http://github.com/atlasaeon" target="_blank" class="btn btn-dark mt-2">
+        <i class="fab fa-github me-2"></i>View My GitHub
+    </a>
+</div>
+
+@code {
+    private readonly string[] _skills =
+    [
+        "Agile Development", "ASP.NET MVC", "Blazor", "C#",
+        "JavaScript", "HTML5", "CSS3", "Bootstrap",
+        "GitHub", "SQL", "Database Design", "jQuery"
+    ];
+}

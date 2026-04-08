@@ -1,0 +1,186 @@
+@page "/projects"
+@inject ProjectService ProjectSvc
+@rendermode InteractiveServer
+
+<PageTitle>Projects | Cadale Thomas</PageTitle>
+
+<div class="hero-section" style="background-image: url('images/coffee.jpg');">
+    <div class="hero-overlay">
+        <div class="hero-quote">
+            <p>Building ideas into reality, one commit at a time.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">My Projects</h2>
+        <button class="btn btn-primary" @onclick="ShowAddForm">
+            <i class="fas fa-plus me-2"></i>Add Project
+        </button>
+    </div>
+
+    @if (_showForm)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <strong>@(_editingProject?.ProjectId > 0 ? "Edit Project" : "New Project")</strong>
+            </div>
+            <div class="card-body">
+                <EditForm Model="_formModel" OnValidSubmit="SaveProject" FormName="project-form">
+                    <DataAnnotationsValidator />
+                    <div class="mb-3">
+                        <label class="form-label">Project Name</label>
+                        <InputText class="form-control" @bind-Value="_formModel.ProjectName" />
+                        <ValidationMessage For="() => _formModel.ProjectName" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <InputTextArea class="form-control" rows="3" @bind-Value="_formModel.ProjectDescription" />
+                        <ValidationMessage For="() => _formModel.ProjectDescription" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Image URL</label>
+                        <InputText class="form-control" placeholder="e.g. images/coffee.jpg" @bind-Value="_formModel.ProjectImg" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">GitHub Repository URL</label>
+                        <InputText class="form-control" placeholder="https://github.com/..." @bind-Value="_formModel.ProjectRepo" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i>Save
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" @onclick="CancelForm">
+                            Cancel
+                        </button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var project in _projects)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm project-card">
+                    @if (!string.IsNullOrEmpty(project.ProjectImg))
+                    {
+                        <img src="@project.ProjectImg" class="card-img-top project-card-img" alt="@project.ProjectName" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@project.ProjectName</h5>
+                        <p class="card-text text-muted">@project.ProjectDescription</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        @if (!string.IsNullOrEmpty(project.ProjectRepo))
+                        {
+                            <a href="@project.ProjectRepo" target="_blank" class="btn btn-sm btn-dark">
+                                <i class="fab fa-github me-1"></i>GitHub
+                            </a>
+                        }
+                        <div class="d-flex gap-2 ms-auto">
+                            <button class="btn btn-sm btn-outline-primary" @onclick="() => EditProject(project)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteProject(project.ProjectId)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!_projects.Any())
+    {
+        <div class="text-center py-5 text-muted">
+            <i class="fas fa-folder-open fa-3x mb-3"></i>
+            <p>No projects yet. Click "Add Project" to get started.</p>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Project> _projects = [];
+    private bool _showForm;
+    private Project? _editingProject;
+    private ProjectFormModel _formModel = new();
+
+    protected override void OnInitialized()
+    {
+        _projects = ProjectSvc.GetAll().ToList();
+    }
+
+    private void ShowAddForm()
+    {
+        _editingProject = null;
+        _formModel = new ProjectFormModel();
+        _showForm = true;
+    }
+
+    private void EditProject(Project project)
+    {
+        _editingProject = project;
+        _formModel = new ProjectFormModel
+        {
+            ProjectName = project.ProjectName,
+            ProjectDescription = project.ProjectDescription,
+            ProjectImg = project.ProjectImg,
+            ProjectRepo = project.ProjectRepo
+        };
+        _showForm = true;
+    }
+
+    private void SaveProject()
+    {
+        if (_editingProject?.ProjectId > 0)
+        {
+            ProjectSvc.Update(new Project
+            {
+                ProjectId = _editingProject.ProjectId,
+                ProjectName = _formModel.ProjectName,
+                ProjectDescription = _formModel.ProjectDescription,
+                ProjectImg = _formModel.ProjectImg,
+                ProjectRepo = _formModel.ProjectRepo
+            });
+        }
+        else
+        {
+            ProjectSvc.Add(new Project
+            {
+                ProjectName = _formModel.ProjectName,
+                ProjectDescription = _formModel.ProjectDescription,
+                ProjectImg = _formModel.ProjectImg,
+                ProjectRepo = _formModel.ProjectRepo
+            });
+        }
+
+        _projects = ProjectSvc.GetAll().ToList();
+        CancelForm();
+    }
+
+    private void DeleteProject(int id)
+    {
+        ProjectSvc.Delete(id);
+        _projects = ProjectSvc.GetAll().ToList();
+    }
+
+    private void CancelForm()
+    {
+        _showForm = false;
+        _editingProject = null;
+        _formModel = new ProjectFormModel();
+    }
+
+    private sealed class ProjectFormModel
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public string ProjectName { get; set; } = string.Empty;
+        public string ProjectDescription { get; set; } = string.Empty;
+        public string ProjectImg { get; set; } = string.Empty;
+        public string ProjectRepo { get; set; } = string.Empty;
+    }
+}
